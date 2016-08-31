@@ -1,20 +1,26 @@
+/* PracaMagisterska
+by Zaeus
+*/
 
-bool isStartSignalReceived = false;
-bool isStopSignalReceived = false;
-const String START_CMD = "START_CMD";
-const String STOP_CMD = "STOP_CMD";
+bool isStartSignalReceived = false; // Flaga otrzymania komendy rozpoczęcia pracy
+bool isStopSignalReceived = false; // Flaga otrzymania komendy zakończenia pracy
+const String START_CMD = "START_CMD"; // Komenda rozpoczęcia pracy
+const String STOP_CMD = "STOP_CMD"; // Komenda zakończenia pracy
 
 void setup() {
+  // Otworzenie portu szeregowego (9600 bps)
   Serial.begin(9600);
 }
 
 void loop() {
+  // Wykonywanie funkcji po otrzymaniu sygnału rozpoczęcia i przed otrzymaniem sygnału zakończenia
   if (isStartSignalReceived && !isStopSignalReceived) {
     Serial.println("Sensor working");
     delay(1000);
   }
 }
 
+// Zdarzenie przyjścia sygnału przez port szeregowy
 void serialEvent() {
   while (Serial.available()) {
     if (!isStartSignalReceived && Serial.available() > 0) {
