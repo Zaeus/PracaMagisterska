@@ -1,0 +1,3 @@
+http://tomczak.org.pl/index.php/dydaktyka/swbud/arduino-odczyt-termometru-cyfrowego/
+http://akademia.nettigo.pl/ds18b20/#co_to_jest_ds18b20
+http://milesburton.com/Main_Page?title=Dallas_Temperature_Control_Library
