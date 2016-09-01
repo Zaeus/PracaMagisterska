@@ -36,6 +36,8 @@ void loop()
       Serial.println(temperature);
     }
   }
+  
+  delay(1000);
 }
 
 // Zdarzenie przyjścia sygnału przez port szeregowy
