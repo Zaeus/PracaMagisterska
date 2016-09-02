@@ -2,12 +2,13 @@
 by Zaeus
 */
 
-#include "DHT.h"
- 
-#define DHTPIN 2          // Numer pinu sygnałowego
-#define DHTTYPE DHT11     // Typ czujnika -> DHT11
- 
-DHT dht(DHTPIN, DHTTYPE); // Definicja czujnika
+#include <dht11.h>  // Biblioteka DHT11 z http://playground.arduino.cc/main/DHT11Lib
+
+#define DHT_POWER 0       // Pin zasilania +3,3V
+#define DHT_DATA 1        // Pin odczytu sygnału
+#define DHT_GROUND 3      // PIN masy 0V
+
+dht11 dht; // Definicja czujnika
 bool isStartSignalReceived = false; // Flaga otrzymania komendy rozpoczęcia pracy
 bool isStopSignalReceived = false; // Flaga otrzymania komendy zakończenia pracy
 const String START_CMD = "START_CMD"; // Komenda rozpoczęcia pracy
@@ -15,10 +16,17 @@ const String STOP_CMD = "STOP_CMD"; // Komenda zakończenia pracy
  
 void setup()
 {
+  delay(2000);
+  
+  // Pin napięcia zasilania +Vcc do DHT11
+  pinMode(DHT_POWER, OUTPUT);  
+  digitalWrite(DHT_POWER, HIGH);
+  // Pin masy GND
+  pinMode(DHT_GROUND, OUTPUT); 
+  digitalWrite(DHT_GROUND ,LOW);
+  
   // Otworzenie portu szeregowego (9600 bps)
   Serial.begin(9600);
-  // Inicjalizacja czujnika DHT11
-  dht.begin();
 }
  
 void loop()
@@ -26,18 +34,19 @@ void loop()
   // Zbieranie danych po otrzymaniu sygnału rozpoczęcia i przed otrzymaniem sygnału zakończenia
   if (isStartSignalReceived && !isStopSignalReceived) {
     // Odczyt temperatury z DHT11
-    float temperature = dht.readTemperature();
+    dht.read(DHT_DATA);
+    float temp = dht.temperature;
 
     // Wysłanie temperatury w przypadku pomyślnego uzyskania wartości
-    if (isnan(temperature)) {
+    if (isnan(temp)) {
       Serial.println("Blad odczytu danych z czujnika");
     } 
     else {
-      Serial.println(temperature);
+      Serial.println(temp);
     }
   }
   
-  delay(1000);
+  delay(2000);
 }
 
 // Zdarzenie przyjścia sygnału przez port szeregowy
