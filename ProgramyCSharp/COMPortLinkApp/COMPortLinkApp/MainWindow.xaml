@@ -14,6 +14,10 @@
         </Grid.RowDefinitions>
         <DockPanel Grid.Row="0">
             <Menu DockPanel.Dock="Top">
+                <MenuItem Name="ClearTextBlockMenuItem" 
+                          Header="Wyczyść dane" 
+                          IsEnabled="True" 
+                          Click="ClearTextBlock_Click"/>
                 <MenuItem Name="RefreshPortsMenuItem" 
                           Header="Odśwież porty" 
                           IsEnabled="True" 
@@ -122,11 +126,14 @@
             </Button>
         </StackPanel>
         <Grid Grid.Row="2">
-            <TextBox Margin="20,20,20,20"
+            <TextBox Margin="30,20,10,20"
                      IsReadOnly="True"
                      Name="ReceivingMessageTextBox"
                      TextWrapping="Wrap"
-                     AcceptsReturn="True">
+                     AcceptsReturn="True"
+                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                     ScrollViewer.VerticalScrollBarVisibility="Visible"
+                     ScrollViewer.CanContentScroll="True">
             </TextBox>
         </Grid>
     </Grid>

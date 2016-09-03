@@ -34,7 +34,7 @@ namespace COMPortLinkApp
             {
                 foreach (Tuple<DateTime, string> data in datas)
                 {
-                    _streamWriter.WriteLine(data.Item1.ToString("HH:mm:ss.fff") + " " + data.Item2);
+                    _streamWriter.Write(data.Item1.ToString("HH:mm:ss.fff") + " " + data.Item2);
                 }
 
                 return true;

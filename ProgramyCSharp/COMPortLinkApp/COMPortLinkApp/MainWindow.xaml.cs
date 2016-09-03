@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.IO.Ports;
 using System.Windows;
 
@@ -104,16 +105,23 @@ namespace COMPortLinkApp
 
             _serialPort = new SerialPort(COMPortsComboBox.SelectedItem.ToString(), int.Parse(BaudRateComboBox.SelectedItem.ToString()));
             _serialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
-            _serialPort.Open();
+            try
+            {
+                _serialPort.Open();
 
-            if (_serialPort.IsOpen)
-            {
-                _serialPort.Write(START_CMD);
+                if (_serialPort.IsOpen)
+                {
+                    _serialPort.Write(START_CMD);
+                }
+                else
+                {
+                    MessageBox.Show("Nie udało się nawiązać połączenia!", "Błąd");
+                    return;
+                }
             }
-            else
+            catch (IOException ex)
             {
-                MessageBox.Show("Nie udało się nawiązać połączenia!", "Błąd");
-                return;
+                MessageBox.Show(ex.Message, "Błąd");                
             }
         }
 
@@ -150,6 +158,8 @@ namespace COMPortLinkApp
             SaveFileDialog fileDialog = new SaveFileDialog();
             fileDialog.Title = "Wybierz plik do zapisu danych";
             fileDialog.Filter = "Text Files (*.txt)|*.txt";
+            fileDialog.OverwritePrompt = true;
+            fileDialog.FileName = "_" + DateTime.Today.ToString("dd-MM-yyyy") + ".txt";
 
             bool? dialogResult = fileDialog.ShowDialog();
 
@@ -224,6 +234,13 @@ namespace COMPortLinkApp
                 ReceivingMessageTextBox.Text += ex.Source + Environment.NewLine;
                 ReceivingMessageTextBox.Text += ex.StackTrace + Environment.NewLine;
             }
+        }
+
+        private void ClearTextBlock_Click(object sender, RoutedEventArgs e)
+        {
+            _allMessages = new List<Tuple<DateTime, string>>();
+            _allMessagesInline = string.Empty;
+            ReceivingMessageTextBox.Dispatcher.Invoke(new Action(() => ReceivingMessageTextBox.Text = _allMessagesInline));
         }
     }
 }
