@@ -1,4 +1,4 @@
-/* PracaMagisterska
+/* PracaMagisterska - czujnik DHT11
 by Zaeus
 */
 
@@ -10,7 +10,6 @@ by Zaeus
 
 dht11 dht; // Definicja czujnika
 bool isStartSignalReceived = false; // Flaga otrzymania komendy rozpoczęcia pracy
-bool isStopSignalReceived = false; // Flaga otrzymania komendy zakończenia pracy
 const String START_CMD = "START_CMD"; // Komenda rozpoczęcia pracy
 const String STOP_CMD = "STOP_CMD"; // Komenda zakończenia pracy
  
@@ -31,8 +30,8 @@ void setup()
  
 void loop()
 {
-  // Zbieranie danych po otrzymaniu sygnału rozpoczęcia i przed otrzymaniem sygnału zakończenia
-  if (isStartSignalReceived && !isStopSignalReceived) {
+  // Zbieranie danych po otrzymaniu sygnału rozpoczęcia zbierania danych
+  if (isStartSignalReceived) {
     // Odczyt temperatury z DHT11
     dht.read(DHT_DATA);
     float temp = dht.temperature;
@@ -62,10 +61,10 @@ void serialEvent() {
       }
     }
   
-    if (!isStopSignalReceived && Serial.available() > 0) {
+    if (isStartSignalReceived && Serial.available() > 0) {
       String message = Serial.readString();
       if (STOP_CMD == message) {
-        isStopSignalReceived = true;
+        isStartSignalReceived = false;
         return;
       }
     }
