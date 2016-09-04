@@ -1,20 +1,22 @@
-/* PracaMagisterska - czujnik Si7021
+/* PracaMagisterska - czujnik MCP9808
 by Zaeus
 */
 
 #include <Wire.h>
-#include <Si7021.h>
+#include "Adafruit_MCP9808.h"
  
 #define DHT_POWER 0       // Pin zasilania +3,3V
 #define DHT_GROUND 3      // PIN masy 0V
 
-SI7021 si7021;
+Adafruit_MCP9808 sensorMCP9808 = Adafruit_MCP9808();
 bool isStartSignalReceived = false; // Flaga otrzymania komendy rozpoczęcia pracy
 const String START_CMD = "START_CMD"; // Komenda rozpoczęcia pracy
 const String STOP_CMD = "STOP_CMD"; // Komenda zakończenia pracy
 
+bool sensorStatus = false;
+
 void setup() {
-  // Pin napięcia zasilania +Vcc do Si7021
+  // Pin napięcia zasilania +Vcc do MCP9808
   pinMode(DHT_POWER, OUTPUT);  
   digitalWrite(DHT_POWER, HIGH);
   // Pin masy GND
@@ -25,28 +27,23 @@ void setup() {
   // Otworzenie portu szeregowego (115200 bps)
   Serial.begin(115200);
   
-  // Inicjalizacja sensoru Si7021 i ustawienie liczby bitów
-  si7021.begin();
-  si7021.setTempRes(14); // Rozdzielczość temperatury - 14 bitów
-  // Dostępne rozdzielczości:
-  // 14-bit Temp <-> 12-bit Humidity
-  // 13-bit Temp <-> 10-bit Humidity
-  // 12-bit Temp <->  8-bit Humidity
-  // 11-bit Temp <-> 11-bit Humidity
+  // Inicjalizacja sensoru 
+  sensorStatus = sensorMCP9808.begin();
 }
 
-void loop() {
-  // Utworzenie zmiennej statycznej do kontrolowania podgrzewacza
-  static uint8_t heaterOnOff; // Create static variable for heater control
-  
+void loop() {  
   // Wykonywanie funkcji po otrzymaniu sygnału rozpoczęcia i przed otrzymaniem sygnału zakończenia
   if (isStartSignalReceived) {
-    for(int i = (heaterOnOff ? 20 : 30); i > 0; i--) {
-      Serial.println(si7021.readTemp(), 6);
-      delay(500);
-    }
+    // Włączenie czujnika
+    sensorMCP9808.shutdown_wake(0);
     
-    heaterOnOff = !heaterOnOff;
+    float tempC = sensorMCP9808.readTempC();
+    Serial.println(tempC, 6);
+    delay(250);
+
+    // Wyłączenie czujnika
+    sensorMCP9808.shutdown_wake(1);
+    delay(500);
   }
   else {
     delay(500);
@@ -60,7 +57,7 @@ void serialEvent() {
       String message = Serial.readString();
       if (START_CMD == message) {
         isStartSignalReceived = true;
-        Serial.println("Si7021");
+        Serial.println("MCP9808");
         Serial.println("Unit [*C]");
         return;
       }
