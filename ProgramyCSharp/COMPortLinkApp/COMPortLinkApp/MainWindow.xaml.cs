@@ -51,6 +51,11 @@ namespace COMPortLinkApp
         /// W przypadku FALSE program przypomni się przy zamykaniu o zapisanie danych
         /// </summary>
         private bool _isCurrentSessionSaved;
+
+        /// <summary>
+        /// Czy zawartość TextBox ma być zawsze przewijana do końca zawartości
+        /// </summary>
+        private bool _scrollToTheEnd;
         
         /// <summary>
         /// Konstruktor domyślny okna MainWindow
@@ -95,9 +100,8 @@ namespace COMPortLinkApp
             }
 
             ReceivingMessageTextBox.Text = string.Empty;
-            StartButton.IsEnabled = StartMenuItem.IsEnabled = false;
+            StartButton.IsEnabled = StartMenuItem.IsEnabled = SaveToFileButton.IsEnabled = SaveToFileMenuItem.IsEnabled = ClearTextBlockMenuItem.IsEnabled = false;
             StopButton.IsEnabled = StopMenuItem.IsEnabled = true;
-            SaveToFileButton.IsEnabled = SaveToFileMenuItem.IsEnabled = true;
 
             _isCurrentSessionSaved = false;
             _allMessages = new List<Tuple<DateTime, string>>();
@@ -132,7 +136,7 @@ namespace COMPortLinkApp
         /// <param name="e"></param>
         private void StopButton_Click(object sender, RoutedEventArgs e)
         {
-            StartButton.IsEnabled = StartMenuItem.IsEnabled = true;
+            StartButton.IsEnabled = StartMenuItem.IsEnabled = SaveToFileButton.IsEnabled = SaveToFileMenuItem.IsEnabled = ClearTextBlockMenuItem.IsEnabled = true;
             StopButton.IsEnabled = StopMenuItem.IsEnabled = false;
 
             if (_serialPort.IsOpen)
@@ -209,6 +213,10 @@ namespace COMPortLinkApp
             _allMessages.Add(new Tuple<DateTime, string>(DateTime.Now, receivedMessage));
             _allMessagesInline += receivedMessage;
             ReceivingMessageTextBox.Dispatcher.Invoke(new Action(() => ReceivingMessageTextBox.Text = _allMessagesInline));
+            if (_scrollToTheEnd)
+            {
+                ReceivingMessageTextBox.Dispatcher.Invoke(new Action(() => ReceivingMessageTextBox.ScrollToEnd()));
+            }
         }
         
         /// <summary>
@@ -241,6 +249,11 @@ namespace COMPortLinkApp
             _allMessages = new List<Tuple<DateTime, string>>();
             _allMessagesInline = string.Empty;
             ReceivingMessageTextBox.Dispatcher.Invoke(new Action(() => ReceivingMessageTextBox.Text = _allMessagesInline));
+        }
+
+        private void ScrollToTheEndCheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            _scrollToTheEnd = ScrollToTheEndCheckBox.IsChecked.HasValue ? ScrollToTheEndCheckBox.IsChecked.Value : false;
         }
     }
 }
