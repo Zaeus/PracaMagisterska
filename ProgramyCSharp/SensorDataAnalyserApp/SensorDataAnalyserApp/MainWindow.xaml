@@ -3,6 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:DV="clr-namespace:System.Windows.Controls.DataVisualization;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+        xmlns:DVC="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
         xmlns:local="clr-namespace:SensorDataAnalyserApp"
         mc:Ignorable="d"
         Title="SensorDataAnalyserApp"
@@ -10,6 +12,7 @@
         Width="1100" 
         MinHeight="500" 
         MinWidth="1050" 
+        WindowState="Maximized"
         Closing="Window_Closing">
     <Grid>
         <Grid.RowDefinitions>
@@ -76,6 +79,72 @@
             <TabControl x:Name="mainTabControl" 
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch">
+                <TabItem Header="Histogram poziomy"
+                         Name="HorizontalHistogram">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <DockPanel Grid.Column="0"
+                                   LastChildFill="True">
+                            <TextBox Name="HorizontalHistogramDataTextBox" 
+                                     ScrollViewer.VerticalScrollBarVisibility="Visible"
+                                     ScrollViewer.CanContentScroll="True"
+                                     Margin="10,10,10,10"
+                                     Width="200">
+                            </TextBox>
+                        </DockPanel>
+                        <DVC:Chart Name="HorizontalHistogramBarChart" 
+                                   Title="Rejestrowane przez czujnik zmiany temperatury"
+                                   Grid.Column="1"                                    
+                                   Canvas.Top="10"
+                                   Canvas.Left="10"
+                                   Canvas.Right="10"
+                                   Canvas.Bottom="10"
+                                   Margin="10,10,10,10">
+                            <DVC:Chart.LegendStyle>
+                                <Style TargetType="DV:Legend">
+                                    <Setter Property="Width" Value="0" />
+                                    <Setter Property="Height" Value="0" />
+                                </Style>
+                            </DVC:Chart.LegendStyle>
+                        </DVC:Chart>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Histogram pionowy"
+                         Name="VerticalHistogram">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <DockPanel Grid.Column="0"
+                                   LastChildFill="True">
+                            <TextBox Name="VerticalHistogramDataTextBox" 
+                                     ScrollViewer.VerticalScrollBarVisibility="Visible"
+                                     ScrollViewer.CanContentScroll="True"
+                                     Margin="10,10,10,10"
+                                     Width="200">
+                            </TextBox>
+                        </DockPanel>
+                        <DVC:Chart Name="VerticalHistogramBarChart" 
+                                   Title="Rejestrowane przez czujnik zmiany temperatury"
+                                   Grid.Column="1"                                    
+                                   Canvas.Top="10"
+                                   Canvas.Left="10"
+                                   Canvas.Right="10"
+                                   Canvas.Bottom="10"
+                                   Margin="10,10,10,10">
+                            <DVC:Chart.LegendStyle>
+                                <Style TargetType="DV:Legend">
+                                    <Setter Property="Width" Value="0" />
+                                    <Setter Property="Height" Value="0" />
+                                </Style>
+                            </DVC:Chart.LegendStyle>
+                        </DVC:Chart>
+                    </Grid>
+                </TabItem>
                 <TabItem Header="Załadowane pliki"
                          Name="LoadedFiles">
                     <Grid>
@@ -88,36 +157,6 @@
                                  ScrollViewer.VerticalScrollBarVisibility="Visible"
                                  ScrollViewer.CanContentScroll="True">
                         </TextBox>
-                    </Grid>
-                </TabItem>
-                <TabItem Header="Histogram"
-                         Name="Histogram">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <StackPanel Grid.Column="0" 
-                                    Orientation="Vertical">
-                            <Button Name="RefreshHistogramButton" 
-                                    Height="30" 
-                                    Width="Auto" 
-                                    Margin="10,10,10,10"
-                                    Background="Yellow"
-                                    IsEnabled="False"
-                                    Click="RefreshHistogram_Click">
-                                <StackPanel Orientation="Horizontal">
-                                    <Image Source="Assets/Refresh.png" 
-                                           Stretch="None"
-                                           Margin="5,0,5,0"
-                                           VerticalAlignment="Center"/>
-                                    <TextBlock Margin="0,0,5,0"
-                                               VerticalAlignment="Center"
-                                               Text="Odśwież">
-                                    </TextBlock>
-                                </StackPanel>
-                            </Button>
-                        </StackPanel>
                     </Grid>
                 </TabItem>
             </TabControl>
