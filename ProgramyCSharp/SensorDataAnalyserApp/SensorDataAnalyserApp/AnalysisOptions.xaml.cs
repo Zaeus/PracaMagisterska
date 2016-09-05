@@ -34,6 +34,11 @@ namespace SensorDataAnalyserApp
         /// </summary>
         public int Digits { get; private set; }
 
+        /// <summary>
+        /// Czy dane przechowywane przez histogram mają być wymazane
+        /// </summary>
+        public bool? ClearHistogramBeforeAnalysis { get; private set; } = true;
+
         public AnalysisOptions()
         {
             InitializeComponent();
@@ -73,6 +78,20 @@ namespace SensorDataAnalyserApp
         private void NumberOfDigitsComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Digits = int.Parse(((ComboBoxItem)NumberOfDigitsComboBox.SelectedValue).Content.ToString());
+        }
+
+        private void ClearHistogramBeforeCheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            ClearHistogramBeforeAnalysis = ClearHistogramBeforeCheckBox.IsChecked;
+
+            if (ClearHistogramBeforeCheckBox.IsChecked.HasValue ? ClearHistogramBeforeCheckBox.IsChecked.Value : false)
+            {
+                ClearHistogramBeforeCheckBox.Content = "Tak";
+            }
+            else
+            {
+                ClearHistogramBeforeCheckBox.Content = "Nie";
+            }
         }
     }
 }

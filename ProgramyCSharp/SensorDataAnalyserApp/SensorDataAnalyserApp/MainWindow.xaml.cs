@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -58,10 +59,10 @@ namespace SensorDataAnalyserApp
                 }
             }
         }
-
+        
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
-
+            Application.Current.Shutdown();
         }
         
         private void AnalyseStart_Click(object sender, RoutedEventArgs e)
@@ -71,6 +72,11 @@ namespace SensorDataAnalyserApp
 
             if (_result.HasValue ? _result.Value : false)
             {
+                if (_analysisOptions.ClearHistogramBeforeAnalysis.HasValue ? _analysisOptions.ClearHistogramBeforeAnalysis.Value : false)
+                {
+                    ClearHistogramsMenuItem_Click(null, null);
+                }
+
                 histogram = _fileCheckerAndLoader.LoadDataAndComputeHistogram(_analysisOptions.Digits);
                 HorizontalHistogramDataTextBox.Text = VerticalHistogramDataTextBox.Text = HelperComponents.DictionaryToString(histogram);
 
@@ -92,14 +98,10 @@ namespace SensorDataAnalyserApp
             }
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void ClearHistogramsMenuItem_Click(object sender, RoutedEventArgs e)
         {
-
-        }
-
-        private void RefreshHistogram_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+            HorizontalHistogramBarChart.Series.Clear();
+            VerticalHistogramBarChart.Series.Clear();
+        }        
     }
 }

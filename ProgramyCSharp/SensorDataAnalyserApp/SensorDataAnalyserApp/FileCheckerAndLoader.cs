@@ -83,7 +83,7 @@ namespace SensorDataAnalyserApp
                 }
             }
 
-            return histogram;
+            return consolidationOfNearestValues(histogram, digits);
         }
 
 
@@ -113,6 +113,37 @@ namespace SensorDataAnalyserApp
             {
                 return null;
             }
-        }        
+        }
+
+        private SortedDictionary<string, uint> consolidationOfNearestValues(SortedDictionary<string, uint> unconsolidatedHistogram, int digits)
+        {
+            SortedDictionary<string, uint> consolidatedHistogram = new SortedDictionary<string, uint>();
+
+            string _previousKey = unconsolidatedHistogram.Keys.First();
+            double _previousKeyValue = double.Parse(_previousKey);
+
+            foreach (KeyValuePair<string, uint> pair in unconsolidatedHistogram)
+            {
+                double _currentKeyValue = double.Parse(pair.Key);
+                double _differenceBetweenKeys = Math.Abs(_previousKeyValue - _currentKeyValue);
+                _previousKeyValue = _currentKeyValue;
+
+                if (_differenceBetweenKeys == 0d)
+                {
+                    consolidatedHistogram.Add(pair.Key, pair.Value);
+                }
+                else if (_differenceBetweenKeys <= 2 * Math.Pow(10, -digits) && _differenceBetweenKeys > 0)
+                {
+                    consolidatedHistogram[_previousKey] += pair.Value;
+                }
+                else
+                {
+                    consolidatedHistogram.Add(pair.Key, pair.Value);
+                    _previousKey = pair.Key;
+                }
+            }
+
+            return consolidatedHistogram;
+        }
     }
 }

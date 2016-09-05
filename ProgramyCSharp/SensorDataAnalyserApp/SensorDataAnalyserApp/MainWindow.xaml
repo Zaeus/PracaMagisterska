@@ -12,8 +12,7 @@
         Width="1100" 
         MinHeight="500" 
         MinWidth="1050" 
-        WindowState="Maximized"
-        Closing="Window_Closing">
+        WindowState="Maximized">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -30,6 +29,10 @@
                           Header="Rozpocznij analizę" 
                           IsEnabled="False" 
                           Click="AnalyseStart_Click"/>
+                <MenuItem Name="ClearHistogramsMenuItem" 
+                          Header="Wyczyść dane histogramów" 
+                          IsEnabled="True" 
+                          Click="ClearHistogramsMenuItem_Click"/>
                 <MenuItem Name="ExitMenuItem"
                           Header="Wyjdź"
                           IsEnabled="True" 
@@ -80,14 +83,14 @@
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch">
                 <TabItem Header="Histogram poziomy"
-                         Name="HorizontalHistogram">
+                         Name="HorizontalHistogramTabItem">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <DockPanel Grid.Column="0"
-                                   LastChildFill="True">
+                                   LastChildFill="True">                            
                             <TextBox Name="HorizontalHistogramDataTextBox" 
                                      ScrollViewer.VerticalScrollBarVisibility="Visible"
                                      ScrollViewer.CanContentScroll="True"
@@ -97,7 +100,7 @@
                         </DockPanel>
                         <DVC:Chart Name="HorizontalHistogramBarChart" 
                                    Title="Rejestrowane przez czujnik zmiany temperatury"
-                                   Grid.Column="1"                                    
+                                   Grid.Column="1"
                                    Canvas.Top="10"
                                    Canvas.Left="10"
                                    Canvas.Right="10"
@@ -113,7 +116,7 @@
                     </Grid>
                 </TabItem>
                 <TabItem Header="Histogram pionowy"
-                         Name="VerticalHistogram">
+                         Name="VerticalHistogramTabItem">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -130,7 +133,7 @@
                         </DockPanel>
                         <DVC:Chart Name="VerticalHistogramBarChart" 
                                    Title="Rejestrowane przez czujnik zmiany temperatury"
-                                   Grid.Column="1"                                    
+                                   Grid.Column="1"
                                    Canvas.Top="10"
                                    Canvas.Left="10"
                                    Canvas.Right="10"
@@ -144,6 +147,10 @@
                             </DVC:Chart.LegendStyle>
                         </DVC:Chart>
                     </Grid>
+                </TabItem>
+                <TabItem Header="Statystyka"
+                         Name="StatisticsTabItem">
+                    
                 </TabItem>
                 <TabItem Header="Załadowane pliki"
                          Name="LoadedFiles">

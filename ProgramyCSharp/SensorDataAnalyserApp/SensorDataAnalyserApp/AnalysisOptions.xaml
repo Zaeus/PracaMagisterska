@@ -20,28 +20,55 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <StackPanel Grid.Column="0">
-                <Label Name="NumberOfDigitsLabel"
-                       Margin="20,20,20,0"
-                       Content="Ilość miejsc po przecinku jaka ma być uwzględniona">                    
-                </Label>
-            </StackPanel>
-            <StackPanel Grid.Column="1">
-                <ComboBox Name="NumberOfDigitsComboBox"
-                          Margin="20,20,20,0"
-                          Height="Auto"
-                          Width="Auto"
-                          SelectedIndex="4"
-                          SelectionChanged="NumberOfDigitsComboBox_SelectionChanged">
-                    <ComboBoxItem>0</ComboBoxItem>
-                    <ComboBoxItem>1</ComboBoxItem>
-                    <ComboBoxItem>2</ComboBoxItem>
-                    <ComboBoxItem>3</ComboBoxItem>
-                    <ComboBoxItem>4</ComboBoxItem>
-                    <ComboBoxItem>5</ComboBoxItem>
-                    <ComboBoxItem>6</ComboBoxItem>
-                </ComboBox>
-            </StackPanel>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Label Name="NumberOfDigitsLabel"
+                   Margin="10,0,10,0"
+                   Grid.Column="0"
+                   Grid.Row="0"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Right"
+                   Content="Ilość miejsc po przecinku jaka ma być uwzględniona">
+            </Label>
+            <Label Name="ClearHistogramBeforeLabel"
+                   Margin="10,0,10,0"
+                   Grid.Column="0"
+                   Grid.Row="1"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Right"
+                   Content="Wyczyścić dane histogramu przed analizą?">
+            </Label>
+            <ComboBox Name="NumberOfDigitsComboBox"
+                      Margin="10,0,10,0"
+                      Height="Auto"
+                      Width="50"
+                      Grid.Column="1"
+                      Grid.Row="0"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Left"
+                      SelectedIndex="4"
+                      SelectionChanged="NumberOfDigitsComboBox_SelectionChanged">
+                <ComboBoxItem>0</ComboBoxItem>
+                <ComboBoxItem>1</ComboBoxItem>
+                <ComboBoxItem>2</ComboBoxItem>
+                <ComboBoxItem>3</ComboBoxItem>
+                <ComboBoxItem>4</ComboBoxItem>
+                <ComboBoxItem>5</ComboBoxItem>
+                <ComboBoxItem>6</ComboBoxItem>
+            </ComboBox>
+            <CheckBox Name="ClearHistogramBeforeCheckBox"
+                      Margin="10,0,10,0"
+                      Grid.Column="1"
+                      Grid.Row="1"
+                      Content="Tak"
+                      IsChecked="True"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Left"
+                      Click="ClearHistogramBeforeCheckBox_Click">
+            </CheckBox>
         </Grid>
         <StackPanel Orientation="Horizontal"
                     Grid.Row="1"
