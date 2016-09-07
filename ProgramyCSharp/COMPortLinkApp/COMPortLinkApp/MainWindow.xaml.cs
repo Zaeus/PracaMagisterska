@@ -55,7 +55,7 @@ namespace COMPortLinkApp
         /// <summary>
         /// Czy zawartość TextBox ma być zawsze przewijana do końca zawartości
         /// </summary>
-        private bool _scrollToTheEnd;
+        private bool _scrollToTheEnd = true;
         
         /// <summary>
         /// Konstruktor domyślny okna MainWindow
