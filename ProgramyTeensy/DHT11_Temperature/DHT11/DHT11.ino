@@ -4,9 +4,9 @@ by Zaeus
 
 #include <dht11.h>  // Biblioteka DHT11 z http://playground.arduino.cc/main/DHT11Lib
 
-#define DHT_POWER 0       // Pin zasilania +3,3V
-#define DHT_DATA 1        // Pin odczytu sygnału
-#define DHT_GROUND 3      // PIN masy 0V
+#define DHT11_POWER 0       // Pin zasilania +3,3V
+#define DHT11_DATA 1        // Pin odczytu sygnału
+#define DHT11_GROUND 3      // PIN masy 0V
 
 dht11 dht; // Definicja czujnika
 bool isStartSignalReceived = false; // Flaga otrzymania komendy rozpoczęcia pracy
@@ -18,11 +18,11 @@ void setup()
   delay(2000);
   
   // Pin napięcia zasilania +Vcc do DHT11
-  pinMode(DHT_POWER, OUTPUT);  
-  digitalWrite(DHT_POWER, HIGH);
+  pinMode(DHT11_POWER, OUTPUT);  
+  digitalWrite(DHT11_POWER, HIGH);
   // Pin masy GND
-  pinMode(DHT_GROUND, OUTPUT); 
-  digitalWrite(DHT_GROUND ,LOW);
+  pinMode(DHT11_GROUND, OUTPUT); 
+  digitalWrite(DHT11_GROUND ,LOW);
   
   // Otworzenie portu szeregowego (9600 bps)
   Serial.begin(9600);
@@ -33,7 +33,7 @@ void loop()
   // Zbieranie danych po otrzymaniu sygnału rozpoczęcia zbierania danych
   if (isStartSignalReceived) {
     // Odczyt temperatury z DHT11
-    dht.read(DHT_DATA);
+    dht.read(DHT11_DATA);
     float temp = dht.temperature;
 
     // Wysłanie temperatury w przypadku pomyślnego uzyskania wartości

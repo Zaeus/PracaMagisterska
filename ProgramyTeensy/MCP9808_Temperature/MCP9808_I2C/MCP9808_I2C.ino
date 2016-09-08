@@ -5,8 +5,8 @@ by Zaeus
 #include <Wire.h>
 #include "Adafruit_MCP9808.h"
  
-#define DHT_POWER 0       // Pin zasilania +3,3V
-#define DHT_GROUND 3      // PIN masy 0V
+#define MCP9808_POWER 0       // Pin zasilania +3,3V
+#define MCP9808_GROUND 3      // PIN masy 0V
 
 Adafruit_MCP9808 sensorMCP9808 = Adafruit_MCP9808();
 bool isStartSignalReceived = false; // Flaga otrzymania komendy rozpoczęcia pracy
@@ -17,11 +17,11 @@ bool sensorStatus = false;
 
 void setup() {
   // Pin napięcia zasilania +Vcc do MCP9808
-  pinMode(DHT_POWER, OUTPUT);  
-  digitalWrite(DHT_POWER, HIGH);
+  pinMode(MCP9808_POWER, OUTPUT);  
+  digitalWrite(MCP9808_POWER, HIGH);
   // Pin masy GND
-  pinMode(DHT_GROUND, OUTPUT); 
-  digitalWrite(DHT_GROUND ,LOW);
+  pinMode(MCP9808_GROUND, OUTPUT); 
+  digitalWrite(MCP9808_GROUND ,LOW);
   // Dla Teensy 3.1 pin 18 to SDA (I2C), zaś pin 19 to SCL (I2C) - biblioteka Wire
   
   // Otworzenie portu szeregowego (115200 bps)

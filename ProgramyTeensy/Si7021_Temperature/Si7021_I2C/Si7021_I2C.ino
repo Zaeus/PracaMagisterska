@@ -5,8 +5,8 @@ by Zaeus
 #include <Wire.h>
 #include <Si7021.h>
  
-#define DHT_POWER 0       // Pin zasilania +3,3V
-#define DHT_GROUND 3      // PIN masy 0V
+#define Si7021_POWER 0       // Pin zasilania +3,3V
+#define Si7021_GROUND 3      // PIN masy 0V
 
 SI7021 si7021;
 bool isStartSignalReceived = false; // Flaga otrzymania komendy rozpoczęcia pracy
@@ -15,11 +15,11 @@ const String STOP_CMD = "STOP_CMD"; // Komenda zakończenia pracy
 
 void setup() {
   // Pin napięcia zasilania +Vcc do Si7021
-  pinMode(DHT_POWER, OUTPUT);  
-  digitalWrite(DHT_POWER, HIGH);
+  pinMode(Si7021_POWER, OUTPUT);  
+  digitalWrite(Si7021_POWER, HIGH);
   // Pin masy GND
-  pinMode(DHT_GROUND, OUTPUT); 
-  digitalWrite(DHT_GROUND ,LOW);
+  pinMode(Si7021_GROUND, OUTPUT); 
+  digitalWrite(Si7021_GROUND ,LOW);
   // Dla Teensy 3.1 pin 18 to SDA (I2C), zaś pin 19 to SCL (I2C) - biblioteka Wire
   
   // Otworzenie portu szeregowego (115200 bps)
