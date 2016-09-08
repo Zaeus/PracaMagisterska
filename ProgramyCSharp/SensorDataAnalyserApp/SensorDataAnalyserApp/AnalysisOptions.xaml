@@ -23,6 +23,8 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Label Name="NumberOfDigitsLabel"
@@ -40,6 +42,14 @@
                    VerticalAlignment="Center"
                    HorizontalAlignment="Right"
                    Content="Wyczyścić dane histogramu przed analizą?">
+            </Label>
+            <Label Name="DataConsolidationLabel"
+                   Margin="10,0,10,0"
+                   Grid.Column="0"
+                   Grid.Row="2"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Right"
+                   Content="Konsolidować podobne grupy danych w czasie analizy?">
             </Label>
             <ComboBox Name="NumberOfDigitsComboBox"
                       Margin="10,0,10,0"
@@ -68,6 +78,16 @@
                       VerticalAlignment="Center"
                       HorizontalAlignment="Left"
                       Click="ClearHistogramBeforeCheckBox_Click">
+            </CheckBox>
+            <CheckBox Name="DataConsolidationCheckBox"
+                      Margin="10,0,10,0"
+                      Grid.Column="1"
+                      Grid.Row="2"
+                      Content="Tak"
+                      IsChecked="True"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Left"
+                      Click="DataConsolidationCheckBox_Click">
             </CheckBox>
         </Grid>
         <StackPanel Orientation="Horizontal"

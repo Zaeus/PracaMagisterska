@@ -77,7 +77,9 @@ namespace SensorDataAnalyserApp
                     ClearHistogramsMenuItem_Click(null, null);
                 }
 
-                histogram = _fileCheckerAndLoader.LoadDataAndComputeHistogram(_analysisOptions.Digits);
+                bool dataConsolidation = _analysisOptions.DataConsolidation.HasValue ? _analysisOptions.DataConsolidation.Value : false;
+
+                histogram = _fileCheckerAndLoader.LoadDataAndComputeHistogram(_analysisOptions.Digits, dataConsolidation);
                 HorizontalHistogramDataTextBox.Text = VerticalHistogramDataTextBox.Text = HelperComponents.DictionaryToString(histogram);
 
                 BarSeries _barSeries = new BarSeries();

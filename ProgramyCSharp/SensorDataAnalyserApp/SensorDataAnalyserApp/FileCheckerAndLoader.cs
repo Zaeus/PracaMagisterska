@@ -37,7 +37,7 @@ namespace SensorDataAnalyserApp
             }
         }
 
-        private SortedDictionary<string, uint> loadDataAndComputeHistogram(int digits)
+        private SortedDictionary<string, uint> loadDataAndComputeHistogram(int digits, bool dataConsolidation)
         {
             SortedDictionary<string, uint> histogram = new SortedDictionary<string, uint>();
 
@@ -83,7 +83,10 @@ namespace SensorDataAnalyserApp
                 }
             }
 
-            return consolidationOfNearestValues(histogram, digits);
+            if (dataConsolidation)
+                return consolidationOfNearestGroups(histogram, digits);
+            else
+                return histogram;
         }
 
 
@@ -101,13 +104,13 @@ namespace SensorDataAnalyserApp
             return true;
         }
 
-        public SortedDictionary<string, uint> LoadDataAndComputeHistogram(int digits)
+        public SortedDictionary<string, uint> LoadDataAndComputeHistogram(int digits, bool dataConsolidation)
         {
             SortedDictionary<string, uint> histogram = new SortedDictionary<string, uint>();
 
             if (checkAllFiles())
             {
-                return loadDataAndComputeHistogram(digits);
+                return loadDataAndComputeHistogram(digits, dataConsolidation);
             }
             else
             {
@@ -115,7 +118,7 @@ namespace SensorDataAnalyserApp
             }
         }
 
-        private SortedDictionary<string, uint> consolidationOfNearestValues(SortedDictionary<string, uint> unconsolidatedHistogram, int digits)
+        private SortedDictionary<string, uint> consolidationOfNearestGroups(SortedDictionary<string, uint> unconsolidatedHistogram, int digits)
         {
             SortedDictionary<string, uint> consolidatedHistogram = new SortedDictionary<string, uint>();
 

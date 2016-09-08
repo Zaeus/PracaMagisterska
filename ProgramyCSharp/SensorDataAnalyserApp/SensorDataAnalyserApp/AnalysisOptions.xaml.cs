@@ -39,6 +39,11 @@ namespace SensorDataAnalyserApp
         /// </summary>
         public bool? ClearHistogramBeforeAnalysis { get; private set; } = true;
 
+        /// <summary>
+        /// Czy podobne, niewiele różnicą się grupy w czasie analizy powinny być łączone w jedną grupę
+        /// </summary>
+        public bool? DataConsolidation { get; set; } = true;
+
         public AnalysisOptions()
         {
             InitializeComponent();
@@ -91,6 +96,20 @@ namespace SensorDataAnalyserApp
             else
             {
                 ClearHistogramBeforeCheckBox.Content = "Nie";
+            }
+        }
+
+        private void DataConsolidationCheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            DataConsolidation = DataConsolidationCheckBox.IsChecked;
+
+            if (DataConsolidationCheckBox.IsChecked.HasValue ? DataConsolidationCheckBox.IsChecked.Value : false)
+            {
+                DataConsolidationCheckBox.Content = "Tak";
+            }
+            else
+            {
+                DataConsolidationCheckBox.Content = "Nie";
             }
         }
     }
