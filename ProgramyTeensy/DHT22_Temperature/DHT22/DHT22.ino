@@ -2,55 +2,65 @@
 by Zaeus
 */
 
-#include "DHT.h"          // biblioteka DHT
+#include "DHT.h"
  
-#define DHT22_POWER 0       // Pin zasilania +3,3V
-#define DHT22_DATA 1        // Pin odczytu sygnału
-#define DHT22_GROUND 3      // PIN masy 0V
-#define DHTTYPE DHT22     // Typ czujnika -> DHT22
+// Pin zasilania +3,3V
+#define DHT22_POWER 0
+// Pin odczytu sygnału
+#define DHT22_DATA 1
+// PIN masy 0V
+#define DHT22_GROUND 3
+// Typ czujnika -> DHT22
+#define DHTTYPE DHT22
  
-DHT dht(DHT22_DATA, DHTTYPE, 40); // definicja czujnika
-bool isStartSignalReceived = false; // Flaga otrzymania komendy rozpoczęcia pracy
-const String START_CMD = "START_CMD"; // Komenda rozpoczęcia pracy
-const String STOP_CMD = "STOP_CMD"; // Komenda zakończenia pracy
+// Instancja klasy czujnika z biblioteki DHT
+DHT dht(DHT22_DATA, DHTTYPE, 40);
+// Flaga otrzymania komendy rozpoczęcia pracy
+bool isStartSignalReceived = false;   
+// Komenda rozpoczęcia pracy
+const String START_CMD = "START_CMD"; 
+// Komenda zakończenia pracy
+const String STOP_CMD = "STOP_CMD"; 
  
 void setup()
 {
   delay(2000);
   
-  // Pin napięcia zasilania +Vcc do DHT22
+  // Ustawienie pinu 0 na pin wyjściowy - zasilania Vcc
   pinMode(DHT22_POWER, OUTPUT);  
+  // Ustawienie stanu pinu 0 na napięcie 3,3V
   digitalWrite(DHT22_POWER, HIGH);
-  // Pin masy GND
+  // Ustawienie pinu 3 na pin wyjściowy - zasilania GND
   pinMode(DHT22_GROUND, OUTPUT); 
+  // Ustawienie stanu pinu 3 na napięcie 0V
   digitalWrite(DHT22_GROUND ,LOW);
   
-  // Otworzenie portu szeregowego (9600 bps)
-  Serial.begin(9600);
+  // Otworzenie portu szeregowego (115200 bodów)
+  Serial.begin(115200);
   // Inicjalizacja czujnika DHT22
   dht.begin();
 }
   
 void loop()
 {
-  // Zbieranie danych po otrzymaniu sygnału rozpoczęcia zbierania danych
+  // Wykonywanie funkcji zbierania danych po otrzymaniu sygnału rozpoczęcia START_CMD
   if (isStartSignalReceived) {
     // Odczyt temperatury z DHT22
-    float temperature = dht.readTemperature();
+    float temp = dht.readTemperature();
 
     // Wysłanie temperatury w przypadku pomyślnego uzyskania wartości
-    if (isnan(temperature)) {
+    if (isnan(temp)) {
       Serial.println("Blad odczytu danych z czujnika");
     } 
     else {
-      Serial.println(temperature);
+      Serial.println(temp, 2);
     }
   }
   
   delay(2000);
 }
 
-// Zdarzenie przyjścia sygnału przez port szeregowy
+// Funkcja obsługi zdarzenia przyjścia informacji przez port szeregowy
 void serialEvent() {
   while (Serial.available()) {
     if (!isStartSignalReceived && Serial.available() > 0) {

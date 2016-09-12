@@ -2,37 +2,44 @@
 by Zaeus
 */
 
-#include <dht11.h>  // Biblioteka DHT11 z http://playground.arduino.cc/main/DHT11Lib
+#include <dht11.h>
 
-#define DHT11_POWER 0       // Pin zasilania +3,3V
-#define DHT11_DATA 1        // Pin odczytu sygnału
-#define DHT11_GROUND 3      // PIN masy 0V
+// Pin zasilania +3,3V
+#define DHT11_POWER 0
+// Pin odczytu sygnału
+#define DHT11_DATA 1
+// PIN masy 0V
+#define DHT11_GROUND 3
 
-dht11 dht; // Definicja czujnika
-bool isStartSignalReceived = false; // Flaga otrzymania komendy rozpoczęcia pracy
-const String START_CMD = "START_CMD"; // Komenda rozpoczęcia pracy
-const String STOP_CMD = "STOP_CMD"; // Komenda zakończenia pracy
+// Instancja klasy czujnika z biblioteki DHT11
+dht11 dht;
+// Flaga otrzymania komendy rozpoczęcia pracy
+bool isStartSignalReceived = false;   
+// Komenda rozpoczęcia pracy
+const String START_CMD = "START_CMD"; 
+// Komenda zakończenia pracy
+const String STOP_CMD = "STOP_CMD"; 
  
 void setup()
 {
-  delay(2000);
-  
-  // Pin napięcia zasilania +Vcc do DHT11
+  // Ustawienie pinu 0 na pin wyjściowy - zasilania Vcc
   pinMode(DHT11_POWER, OUTPUT);  
+  // Ustawienie stanu pinu 0 na napięcie 3,3V
   digitalWrite(DHT11_POWER, HIGH);
-  // Pin masy GND
+  // Ustawienie pinu 3 na pin wyjściowy - zasilania GND
   pinMode(DHT11_GROUND, OUTPUT); 
+  // Ustawienie stanu pinu 3 na napięcie 0V
   digitalWrite(DHT11_GROUND ,LOW);
   
-  // Otworzenie portu szeregowego (9600 bps)
-  Serial.begin(9600);
+  // Otworzenie portu szeregowego (115200 bodów)
+  Serial.begin(115200);
 }
  
 void loop()
 {
-  // Zbieranie danych po otrzymaniu sygnału rozpoczęcia zbierania danych
+  // Wykonywanie funkcji zbierania danych po otrzymaniu sygnału rozpoczęcia START_CMD
   if (isStartSignalReceived) {
-    // Odczyt temperatury z DHT11
+    // Odczyt temperatury z czujnika DHT11
     dht.read(DHT11_DATA);
     float temp = dht.temperature;
 
@@ -41,14 +48,14 @@ void loop()
       Serial.println("Blad odczytu danych z czujnika");
     } 
     else {
-      Serial.println(temp);
+      Serial.println(temp, 2);
     }
   }
   
   delay(2000);
 }
 
-// Zdarzenie przyjścia sygnału przez port szeregowy
+// Funkcja obsługi zdarzenia przyjścia informacji przez port szeregowy
 void serialEvent() {
   while (Serial.available()) {
     if (!isStartSignalReceived && Serial.available() > 0) {

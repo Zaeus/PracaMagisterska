@@ -5,56 +5,82 @@ by Zaeus
 #include <OneWire.h>
 #include <DS18B20.h>
 
-#define DS18B20_POWER 0       // Cyfrowy Pin 0 - zasilanie +3,3V
-#define DS18B20_DATA 2        // Cyfrow Pin 2 - odczytu sygnału
-#define DS18B20_GROUND 3      // Cyfrowy PIN 3 - masa 0V
+// Pin zasilania +3,3V
+#define DS18B20_POWER 0
+// Pin odczytu sygnału
+#define DS18B20_DATA 2
+// PIN masy 0V
+#define DS18B20_GROUND 3
 
-bool isStartSignalReceived = false; // Flaga otrzymania komendy rozpoczęcia pracy
-const String START_CMD = "START_CMD"; // Komenda rozpoczęcia pracy
-const String STOP_CMD = "STOP_CMD"; // Komenda zakończenia pracy
+// Flaga otrzymania komendy rozpoczęcia pracy
+bool isStartSignalReceived = false;   
+// Komenda rozpoczęcia pracy
+const String START_CMD = "START_CMD"; 
+// Komenda zakończenia pracy
+const String STOP_CMD = "STOP_CMD";
 
-byte address[8] = {0x28, 0xFF, 0xDC, 0x18, 0x64, 0x14, 0x1, 0xA1};
+// Tablica adresów czujnika
+byte address[8];
 
+// Instancja klasy OneWire z biblioteki OneWire
 OneWire onewire(DS18B20_DATA);
-DS18B20 sensors(&onewire);
+// Instancja klasy czujnika z biblioteki DS18B20
+DS18B20 sensor(&onewire);
+
+// Funkcja wyszukująca adres czujnika DS18B20
+void findDS18B20Address() {
+  onewire.reset_search();
+  while(onewire.search(address))
+  {
+    if (address[0] != 0x28){
+      continue;
+    }
+    if (OneWire::crc8(address, 7) != address[7])
+    {
+      Serial.println(F("Błędny adres, sprawdź połączenia"));
+      break;
+    }
+  }
+}
 
 void setup()
 {
-  delay(2000);
-  
-  // Pin napięcia zasilania +Vcc do DS18B20
+  // Ustawienie pinu 0 na pin wyjściowy - zasilania Vcc
   pinMode(DS18B20_POWER, OUTPUT);  
+  // Ustawienie stanu pinu 0 na napięcie 3,3V
   digitalWrite(DS18B20_POWER, HIGH);
-  // Pin masy GND
+  // Ustawienie pinu 3 na pin wyjściowy - zasilania GND
   pinMode(DS18B20_GROUND, OUTPUT); 
+  // Ustawienie stanu pinu 3 na napięcie 0V
   digitalWrite(DS18B20_GROUND ,LOW);
   
-  // Otworzenie portu szeregowego (115200 bps)
-  Serial.begin(115200);
-  
-  E(sensors.begin());
-  E(sensors.request(address));
+  // Otworzenie portu szeregowego (115200 bodów)
+  Serial.begin(115200);  
+
+  // Inicjalizacja adresów czujnika DS18B20
+  findDS18B20Address();
+  // Inicjalizacja czujnika DS18B20
+  sensor.begin();
+  sensor.request(address);
 }
 
 void loop() {
-  // Zbieranie danych po otrzymaniu sygnału rozpoczęcia zbierania danych
+  // Wykonywanie funkcji zbierania danych po otrzymaniu sygnału rozpoczęcia START_CMD
   if (isStartSignalReceived) {
-    // Odczyt temperatury z DS18B20
-    if (sensors.available())
+    // Odczyt temperatury z czujnika DS18B20
+    if (sensor.available())
     {
-      float temperature = sensors.readTemperature(address);
-      TE(temperature);
-  
-      Serial.println(temperature);
-  
-      E(sensors.request(address));
+      float temp = sensor.readTemperature(address);  
+      // Wysłanie otrzymanej wartości z 6 miejscami po przecinku
+      Serial.println(temp, 6);
+      sensor.request(address);
     }    
   }
   
   delay(1000);
 }
 
-// Zdarzenie przyjścia sygnału przez port szeregowy
+// Funkcja obsługi zdarzenia przyjścia informacji przez port szeregowy
 void serialEvent() {
   while (Serial.available()) {
     if (!isStartSignalReceived && Serial.available() > 0) {
