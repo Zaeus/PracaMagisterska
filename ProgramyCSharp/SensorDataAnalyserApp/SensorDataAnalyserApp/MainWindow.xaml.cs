@@ -82,6 +82,9 @@ namespace SensorDataAnalyserApp
                 histogram = _fileCheckerAndLoader.LoadDataAndComputeHistogram(_analysisOptions.Digits, dataConsolidation);
                 HorizontalHistogramDataTextBox.Text = VerticalHistogramDataTextBox.Text = HelperComponents.DictionaryToString(histogram);
 
+                StatisticMaximumTextBox.Text = _fileCheckerAndLoader.Max.ToString();
+                StatisticMinimumTextBox.Text = _fileCheckerAndLoader.Min.ToString();
+
                 BarSeries _barSeries = new BarSeries();
                 _barSeries.Title = "Rejestrowane przez czujnik zmiany temperatury";
                 _barSeries.DependentValuePath = "Value";

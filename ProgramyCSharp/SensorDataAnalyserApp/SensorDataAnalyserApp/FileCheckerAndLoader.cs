@@ -12,6 +12,10 @@ namespace SensorDataAnalyserApp
     {
         public string[] ListOfFiles { get; private set; }
 
+        public double Max { get; private set; }
+
+        public double Min { get; private set; }
+
         public FileCheckerAndLoader(string[] ListOfFiles)
         {
             this.ListOfFiles = ListOfFiles;
@@ -62,6 +66,7 @@ namespace SensorDataAnalyserApp
                     }
                     
                     double _previousValue = double.Parse(_datasFromFile.First().Substring(_datasFromFile.First().IndexOf(" ")), CultureInfo.InvariantCulture);
+                    Min = Max = _previousValue; // Inicjalizacja Minimum i Maksimum
 
                     for (int i = 1; i < _datasFromFile.Count; i++)
                     {
@@ -69,16 +74,18 @@ namespace SensorDataAnalyserApp
                         double _currentValue = double.Parse(_data.Substring(_data.IndexOf(" ")), CultureInfo.InvariantCulture);
                         double _difference = Math.Abs(_currentValue - _previousValue);
                         string _key = _difference.ToString("N" + digits);
+
+                        if (_currentValue > Max)
+                            Max = _currentValue;
+                        else if (_currentValue < Min)
+                            Min = _currentValue;
+
                         _previousValue = _currentValue;
 
                         if (histogram.ContainsKey(_key))
-                        {
                             histogram[_key]++;
-                        }
                         else
-                        {
                             histogram[_key] = 1;
-                        }
                     }
                 }
             }
