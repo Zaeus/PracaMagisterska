@@ -39,7 +39,7 @@ void loop() {
     // Odczyt temperatury z LM35 z pinu analogowego
     int reading = analogRead(LM35_DATA);
     // Przeliczenie informacji o napięciu na temperaturę
-    float tempC = reading / 9.31;    
+    float tempC = ((reading * 3.2) - 500) / 10;    
     // Wysłanie temperatury z dokładnością do 6 miejsc po przecinku
     Serial.println(tempC, 6);
   }
